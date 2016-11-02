@@ -1,0 +1,119 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>청어</title>
+
+        <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <style media="screen">
+            html, body{
+                margin: 0;
+                padding: 0;
+
+                min-width: 100%;
+                width: 100%;
+                max-width: 100%;
+
+                min-height: 100%;
+                height: 100%;
+                max-height: 100%;
+            }
+
+            #sign-box {
+                background-color: white;
+                width: 400px;
+                height: auto;
+            }
+
+            [type="radio"].with-gap:checked + label:before {
+                border-radius: 50%;
+                border: 2px solid #673fb4;
+            }
+
+            [type="radio"].with-gap:checked + label:after {
+                border-radius: 50%;
+                border: 2px solid #673fb4;
+                background-color: #673fb4;
+                z-index: 0;
+                -webkit-transform: scale(.5);
+                -moz-transform: scale(.5);
+                -ms-transform: scale(.5);
+                -o-transform: scale(.5);
+                transform: scale(.5);
+            }
+           .input-field input[type=text]:focus {
+                border-bottom: 1px solid #673fb4;
+                box-shadow: 0 1px 0 0 #000;
+           }
+          .input-field input[type=email]:focus {
+               border-bottom: 1px solid #673fb4;
+               box-shadow: 0 1px 0 0 #000;
+          }
+         .input-field input[type=password]:focus {
+              border-bottom: 1px solid #673fb4;
+              box-shadow: 0 1px 0 0 #000;
+         }
+        </style>
+    </head>
+    <body class="valign-wrapper">
+
+        <div class="container valign" id="sign-box">
+
+            <form class="center input-field" action="{% url 'accounts:register' %}" method="post">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                    <p style="color: red;">
+                        Try again.
+                    </p>
+
+                {% endif %}
+                <input style="width: 280px;" type="text" name="name" placeholder="이름을 입력해주세요." autocomplete="off">
+                <input style="width: 280px;" type="email" name="username" placeholder="이메일을 입력해주세요." autocomplete="off">
+                <input style="width: 280px;" type="password" name="password1" placeholder="비밀번호를 입력해주세요." autocomplete="off">
+                <input style="width: 280px;" type="password" name="password2" placeholder="비밀번호를 다시 입력해주세요." autocomplete="off">
+
+                <p class="center" style="margin-top: -10px;">
+                    <input class="with-gap" name="job" type="radio" id="job1" />
+                    <label for="job1">선생님</label>
+                    <input class="with-gap" name="job" type="radio" id="job2" />
+                    <label for="job2">학생</label>
+                </p>
+
+                <br>
+                <button style="width: 280px;" class="btn waves-effect waves-light deep-purple" type="submit" name="action">가입완료</button>
+                <br><br>
+
+            </form>
+
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(() => {
+                setBackground();
+            });
+
+            function setBackground() {
+                randomInt = Math.floor( (Math.random() * (3 - 0 + 0)) + 0 );
+
+                data = [`url("{% static 'images/background1.png' %}") no-repeat center center fixed`,
+                        `url("{% static 'images/background2.png' %}") no-repeat center center fixed`,
+                        `url("{% static 'images/background3.png' %}") no-repeat center center fixed`,
+                        `url("{% static 'images/background4.png' %}") no-repeat center center fixed`,
+                    ];
+
+                $('html').css('background', data[randomInt]);
+                $('html').css('-webkit-background-size', 'cover');
+                $('html').css('-moz-background-size', 'cover');
+                $('html').css('-o-background-size', 'cover');
+                $('html').css('background-size', 'cover');
+            }
+        </script>
+    </body>
+</html>

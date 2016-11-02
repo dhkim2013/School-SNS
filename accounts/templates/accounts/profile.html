@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>School Chat</title>
+    </head>
+    <body>
+        {% if request.user.is_authenticated %}
+        <h1>Hello, {{ user.name }}</h1>
+        {% endif %}
+    </body>
+</html>

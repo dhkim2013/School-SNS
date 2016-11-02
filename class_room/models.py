@@ -4,6 +4,6 @@ from accounts.models import CustumUser
 
 # Create your models here.
 class Class(models.Model):
-    grade = models.IntegerField()
-    classNumber = models.IntegerField()
+    name = models.CharField(max_length=20, default='test')
+    code = models.IntegerField()
     students = models.ManyToManyField(CustumUser, null=True)

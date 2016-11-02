@@ -5,4 +5,4 @@ class ClassForm(forms.ModelForm):
 
     class Meta:
         model = Class
-        fields = ('grade', 'classNumber')
+        fields = ('name', 'code')

@@ -48,6 +48,13 @@
     </head>
     <body>
 
+        {% ifequal error.error True %}
+
+            <script type="text/javascript">
+                alert('선생님만 그룹을 생성할 수 있습니다.');
+            </script>
+
+        {% endifequal %}
         <nav>
             <div class="nav-wrapper" style="background-color: black;">
                 <a href="/" class="brand-logo" style="color: white;">로고</a>

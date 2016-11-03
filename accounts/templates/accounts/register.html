@@ -26,20 +26,24 @@
             }
 
             #sign-box {
-                background-color: white;
                 width: 400px;
                 height: auto;
             }
 
             [type="radio"].with-gap:checked + label:before {
                 border-radius: 50%;
-                border: 2px solid #673fb4;
+                border: 2px solid #d1d1d1;
+            }
+
+            [type="radio"].with-gap + label:before {
+                border-radius: 50%;
+                border: 2px solid #d1d1d1;
             }
 
             [type="radio"].with-gap:checked + label:after {
                 border-radius: 50%;
-                border: 2px solid #673fb4;
-                background-color: #673fb4;
+                border: 2px solid #d1d1d1;
+                background-color: #d1d1d1;
                 z-index: 0;
                 -webkit-transform: scale(.5);
                 -moz-transform: scale(.5);
@@ -58,6 +62,10 @@
             .input-field input[type=password]:focus {
                 border-bottom: 1px solid #673fb4;
                 box-shadow: 0 1px 0 0 #000;
+            }
+
+            input:focus, input {
+                color: white;
             }
         </style>
     </head>
@@ -80,10 +88,11 @@
                 <input style="width: 280px;" type="password" name="password2" placeholder="비밀번호를 다시 입력해주세요." autocomplete="off">
 
                 <p class="center" style="margin-top: -10px;">
-                    <input class="with-gap" name="job" type="radio" id="job1" />
-                    <label for="job1">선생님</label>
-                    <input class="with-gap" name="job" type="radio" id="job2" />
-                    <label for="job2">학생</label>
+                    <input class="with-gap" name="job" type="radio" id="job1" value="teacher"/>
+                    <label style="color: #d1d1d1;" for="job1">선생님</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input class="with-gap" name="job" type="radio" id="job2" value="student"/>
+                    <label style="color: #d1d1d1;" for="job2">학생</label>
                 </p>
 
                 <br>

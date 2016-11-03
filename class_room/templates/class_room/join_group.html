@@ -25,66 +25,61 @@
                 max-height: 100%;
             }
 
-            #sign-box {
-                background-color: white;
-                width: 400px;
-                height: auto;
+            [type="radio"].with-gap:checked + label:before {
+                border-radius: 50%;
+                border: 2px solid #673fb4;
             }
 
-           .input-field input[type=email]:focus {
+            [type="radio"].with-gap:checked + label:after {
+                border-radius: 50%;
+                border: 2px solid #673fb4;
+                background-color: #673fb4;
+                z-index: 0;
+                -webkit-transform: scale(.5);
+                -moz-transform: scale(.5);
+                -ms-transform: scale(.5);
+                -o-transform: scale(.5);
+                transform: scale(.5);
+            }
+            .input-field input[type=text]:focus {
                 border-bottom: 1px solid #673fb4;
                 box-shadow: 0 1px 0 0 #000;
-           }
-
-           .input-field input[type=password]:focus {
-                border-bottom: 1px solid #673fb4;
-                box-shadow: 0 1px 0 0 #000;
-           }
-
-           #site-intro {
-               color: #bab8be;
-               font-size: 20px;
-           }
+            }
+            input:focus, input {
+                color: white;
+            }
         </style>
-
     </head>
-    <body class="valign-wrapper">
-        <div class="container valign" id="sign-box">
+    <body>
+        <nav>
+            <div class="nav-wrapper" style="background-color: black;">
+                <a href="/" class="brand-logo" style="color: white;">로고</a>
+            </div>
+        </nav>
 
-            <form class="center input-field" action="{% url 'accounts:login' %}" method="post">
+        {% if request.user.is_authenticated %}
 
-                {% csrf_token %}
+        <div class="valign-wrapper" id="valign-wrapper">
+            <div class="valign container center">
 
-                <div class="center" id="site-intro">
-                    <span>놀랄 만큼 간단하고</span><br>
-                    <span>놀랄 만큼 유용한</span><br>
-                    <span>청출어람을 사용해보세요!</span>
+                <div id="how-many" style="color: white;">
+                    <h2>{{ groupCnt }}개의 그룹이</h2>
+                    <h4>함께 하고 있습니다!</h4>
                 </div>
-
-                <input style="width: 280px;" type="email" name="username" placeholder="이메일" autocomplete="off">
-                <input style="width: 280px;" type="password" name="password" placeholder="비밀번호" autocomplete="off">
-
-                {% if form.errors %}
-                    <p style="color: red; margin-top: -10px;" class="center">존재하지 않는 이메일 또는 비밀번호입니다.</p>
-
-                {% endif %}
-
-                <button style="width: 280px;" class="btn waves-effect waves-light deep-purple" type="submit" name="action">확인</button>
                 <br><br>
 
-                <div class="container" style="width: 280px;" id="or">
-                    <hr class="left" style="width: 120px;">
-                    <span class="center" style="color: #bab8be; font-size: 12px;">또는</span>
-                    <hr class="right" style="width: 120px;">
-                </div>
+                <form class="input-field" method="post">
+                    {% csrf_token %}
 
-                <br>
-                <a href="{% url 'accounts:register' %}" class="center" style="color: #bab8be;">회원가입</a>
-                <br><br>
+                    <input type="text" name="code" placeholder="5자리의 숫자코드를 입력하세요." style="width: 300px"><br><br>
+                    <button style="width: 280px;" class="btn waves-effect waves-light deep-purple" type="submit" name="action">확인</button>
 
-            </form>
+                </form>
 
+            </div>
         </div>
+
+        {% endif %}
 
         <script type="text/javascript">
             $(document).ready(() => {

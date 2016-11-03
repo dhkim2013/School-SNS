@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from .forms import UserCreateForm
 from django.contrib.auth import authenticate,login, models
 from .models import CustumUser
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout
 
 # Create your views here.
 def register(request):
@@ -17,14 +19,32 @@ def register(request):
             user = authenticate(username=username, password=password)
 
             if user is not None:
-                login(request, user)
-                return HttpResponseRedirect('/login/')
+                auth_login(request, user)
+                return HttpResponseRedirect('/')
 
     else:
         form = UserCreateForm()
 
     return render(request, 'accounts/register.html', { 'form': form })
 
+def login(request):
+    logout(request)
+    if request.method == 'POST':
+
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            auth_login(request, user)
+            return HttpResponseRedirect('/')
+
+    return render(request, 'accounts/login.html')
+
 def profile(request):
     user = CustumUser.objects.get(username=request.user)
     return render(request, 'accounts/profile.html', { 'user' : user })
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/')

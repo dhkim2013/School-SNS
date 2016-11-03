@@ -13,7 +13,22 @@ def index(request):
         user = CustumUser.objects.get(username=request.user)
 
         if user.hasGroup == True:
-            return render(request, 'class_room/mygroup.html')
+
+            if user.job == 'teacher':
+                group = Class.objects.get(teacher=user.username)
+
+            else:
+                group = Class.objects.all().filter(students=user)[0]
+
+            if request.method == 'POST':
+                form = PostForm(request.POST)
+                post = form.save(commit=False)
+                post.author = request.user
+                post.save()
+                group.post.add(post)
+                group.save()
+
+            return render(request, 'class_room/mygroup.html', {'group': group})
 
         else :
             return render(request, 'class_room/index.html', {'user': user})

@@ -11,13 +11,68 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+        <style media="screen">
+            body {
+                background-color: #f8f7f8;
+            }
+        </style>
+
     </head>
     <body>
-        <nav>
+
+        <nav style="position: fixed;">
             <div class="nav-wrapper" style="background-color: white;">
-                <a href="/" class="brand-logo center" style="color: grey;">로고</a>
-                <a href="/" class="brand-logo center" style="color: grey;">홍길동</a>
+                <a href="/" class="brand-logo center" style="color: grey;">{{ group.name }}</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="#" data-activates="slide-out" id="button-collapse"><i style="color: black;" class="material-icons">menu</i></a></li>
+                </ul>
             </div>
         </nav>
+
+        <br><br><br><br><br>
+
+        {% for i in group.post.all %}
+            <div class="container" style="width: 800px; height: auto; background-color: white;"><br>
+                <div class="" style="margin-left: 40px;" id="content">
+                    <span style="color: #5b5a5b; font-size: 30px;">{{ i.title }}</span><br>
+                    <span style="color: #e0e0e0; font-size: 20px;">{{ i.author.name }}</span>
+                    <br><br>
+                    <span style="color: grey; font-size: 15px;">{{ i.text|linebreaksbr }}</span>
+                </div>
+                <br>
+                <hr style="width: 750px; border: solid 1px #e0e0e0">
+                <br>
+            </div>
+        {% endfor %}
+
+        <ul id="slide-out" class="side-nav">
+            <li><a class="waves-effect" data-target="modal1" href="#modal1">글쓰기</a></li>
+            <li><a class="waves-effect" href="#!">게시판</a></li>
+            <li><a class="waves-effect" href="#!">설정</a></li>
+            <li><a class="waves-effect" href="#!">로그아웃</a></li>
+        </ul>
+
+        <!-- Modal Structure -->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <h4>Modal Header</h4>
+                <p>A bunch of text</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+                $('.modal').modal();
+            });
+
+            $('#button-collapse').sideNav({
+                menuWidth: 200, // Default is 240
+                edge: 'right' // Choose the horizontal origin
+            });
+        </script>
     </body>
 </html>

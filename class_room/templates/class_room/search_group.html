@@ -10,8 +10,9 @@
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
 
-        <style media="screen">
+    <style media="screen">
             html, body{
                 margin: 0;
                 padding: 0;
@@ -25,9 +26,31 @@
                 max-height: 100%;
             }
 
+            #valign-wrapper {
+                margin: 0;
+                padding: 0;
+
+                min-width: 100%;
+                width: 100%;
+                max-width: 100%;
+
+                min-height: 100%;
+                height: 100%;
+                max-height: 100%;
+            }
+
+            .input-field input[type=text]:focus {
+                border-bottom: 1px solid #673fb4;
+                box-shadow: 0 1px 0 0 #000;
+            }
             [type="radio"].with-gap:checked + label:before {
                 border-radius: 50%;
                 border: 2px solid #673fb4;
+            }
+
+            [type="radio"].with-gap + label:before {
+                border-radius: 50%;
+                border: 2px solid #d1d1d1;
             }
 
             [type="radio"].with-gap:checked + label:after {
@@ -41,46 +64,49 @@
                 -o-transform: scale(.5);
                 transform: scale(.5);
             }
-            .input-field input[type=text]:focus {
-                border-bottom: 1px solid #673fb4;
-                box-shadow: 0 1px 0 0 #000;
-            }
-            input:focus, input {
-                color: white;
-            }
-        </style>
-    </head>
+    </style>
+
     <body>
-        <nav>
-            <div class="nav-wrapper" style="background-color: black;">
-                <a href="/" class="brand-logo" style="color: white;">로고</a>
-            </div>
-        </nav>
-
-        {% if request.user.is_authenticated %}
-
         <div class="valign-wrapper" id="valign-wrapper">
-            <div class="valign container center">
-
-                <div id="how-many" style="color: white;">
-                    <h2>{{ groupCnt }}개의 그룹이</h2>
-                    <h4>함께 하고 있습니다!</h4>
-                </div>
+            <div class="valign center container" id="search-box" style="background-color: white; width: 500px; height: auto;">
                 <br><br>
+                <span style="color: #bebbbe; font-size: 30px;">그룹찾기</span>
+
+                <form class="input-field" method="get">
+                    {% csrf_token %}
+
+                    <input type="text" name="code" style="width: 250px;" placeholder="그룹 코드(5자리)를 입력해주세요.">
+                    <button style="width: 100px;" class="btn waves-effect waves-light deep-purple" type="submit" name="action">검색</button>
+
+                </form>
 
                 <form class="input-field" method="post">
                     {% csrf_token %}
 
-                    <input type="text" name="name" placeholder="그룹명을 입력하세요.(10자 이내)" style="width: 300px;" maxlength="10"><br>
-                    <input type="text" name="code" placeholder="5자리의 숫자코드를 입력하세요." style="width: 300px"><br><br>
-                    <button style="width: 280px;" class="btn waves-effect waves-light deep-purple" type="submit" name="action">확인</button>
+                    <div id="group-list" style="height: 300px; width: 400px; margin-left: 50px; overflow: scroll;">
+                        {% if result %}
+                            {% for i in result %}
+                            <p>
+                                <input type="radio" class="with-gap left" name="pk" value={{ i.pk }} id={{ i.pk }}>
+                                <label for={{ i.pk }}><span style="font-size: 40px; text-align: left;" class="">{{ i.name }}</span></label>
+                            </p>
+
+                            {% endfor %}
+
+                        {% else %}
+                            <span style="color: #bebbbe;">검색 결과가 없습니다.</span>
+                        {% endif %}
+                    </div>
+
+                    <br>
+                    <a href="{% url 'class_room:index' %}" class="waves-effect waves-light deep-purple btn">돌아가기</a>
+                    <button class="btn waves-effect waves-light deep-purple" type="submit" name="action">가입요청</button>
+                    <br><br>
 
                 </form>
 
             </div>
         </div>
-
-        {% endif %}
 
         <script type="text/javascript">
             $(document).ready(() => {

@@ -56,6 +56,11 @@
                 color: white;
                 background-color: white;
             }
+
+            #site-intro span {
+                display: block;
+                line-height: 1em;
+             }
         </style>
 
     </head>
@@ -67,18 +72,18 @@
                 {% csrf_token %}
 
                 <div class="center" id="site-intro">
-                    <span>놀랄 만큼 간단하고</span><br>
-                    <span>놀랄 만큼 유용한</span><br>
+                    <span>놀랄 만큼 간단하고</span>
+                    <span>놀랄 만큼 유용한</span>
                     <span>청출어람을 사용해보세요!</span>
-                    <br><br>
+                    <br>
                 </div>
 
                 <input style="width: 280px;" type="email" name="username" placeholder="이메일" autocomplete="off">
                 <input style="width: 280px;" type="password" name="password" placeholder="비밀번호" autocomplete="off">
 
-                {% if form.errors %}
-                
-                    <p style="color: white; margin-top: -10px;" class="center">존재하지 않는 이메일 또는 비밀번호입니다.</p>
+                {% if error %}
+
+                    <p style="color: white; margin-top: -10px;" class="center">{{ error }}</p>
 
                 {% endif %}
 

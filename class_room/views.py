@@ -10,23 +10,13 @@ from accounts.models import CustumUser
 def index(request):
 
     try:
-
-        if request.GET.get('error') == '1':
-            print('error')
-            error = {
-                'error': True,
-                'message': '선생님만 그룹을 생성할 수 있습니다.'
-            }
-
-        else:
-            print('not error')
-            error = {
-                'error': False,
-                'message': ''
-            }
-
         user = CustumUser.objects.get(username=request.user)
-        return render(request, 'class_room/index.html', {'user': user, 'error': error})
+
+        if user.hasGroup == True:
+            return render(request, 'class_room/mygroup.html')
+
+        else :
+            return render(request, 'class_room/index.html', {'user': user})
 
     except:
         return HttpResponseRedirect('accounts/login')
@@ -34,7 +24,7 @@ def index(request):
 
 def make_group(request):
     user = CustumUser.objects.get(username=request.user)
-    form = Class(code=request.POST.get('code'), name=request.POST.get('name'))
+    form = Class(teacher=user, code=request.POST.get('code'), name=request.POST.get('name'))
 
     if user.job == 'teacher':
         if request.method == 'POST':
@@ -44,11 +34,13 @@ def make_group(request):
             form = Class()
 
         group = Class.objects.filter().order_by('name')
+        user.hasGroup = True
+        user.save()
 
-        return render(request, 'class_room/make_group.html', {'form' : form, 'groupCnt' : len(group)})
+        if user.hasGroup is False:
+            return render(request, 'class_room/make_group.html', {'form' : form, 'groupCnt' : len(group)})
 
-    else:
-        return HttpResponseRedirect('/?error=1')
+    return HttpResponseRedirect('/')
 
 def join_group(request):
     if request.method == 'POST':
@@ -56,7 +48,34 @@ def join_group(request):
         group = Class.objects.get(code=request.POST.get('code'))
         group.students.add(user)
         group.save()
+        user.hasGroup = True
+        user.save()
 
         return HttpResponseRedirect('/')
 
     return render(request, 'class_room/join_group.html', {'groupCnt' : len(Class.objects.filter())})
+
+def search_group(request):
+
+    if request.method == 'GET':
+        code = request.GET.get('code')
+        hasData = False
+
+        if (code != None) and (code != ''):
+            result = Class.objects.filter(code=int(code)).order_by('pk')
+
+            if len(result) == 1:
+                hasData = True
+
+            return render(request, 'class_room/search_group.html', {'result': result, 'hasData': hasData})
+
+        return render(request, 'class_room/search_group.html', {'hasData': hasData})
+
+    elif request.method == 'POST':
+        print(request.POST.get('pk'))
+        group = Class.objects.get(pk=int(request.POST.get('pk')))
+        user = CustumUser.objects.get(username=request.user)
+        group.requestUser.add(user)
+        group.save()
+
+        return render(request, 'class_room/request_finish.html')

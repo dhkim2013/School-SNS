@@ -8,3 +8,4 @@ class Class(models.Model):
     name = models.CharField(max_length=20, default='test')
     code = models.IntegerField()
     students = models.ManyToManyField(CustumUser, null=True, related_name='student_set')
+    requestUser = models.ManyToManyField(CustumUser, null=True, related_name='request_list_set')

@@ -42,19 +42,6 @@ def make_group(request):
 
     return HttpResponseRedirect('/')
 
-def join_group(request):
-    if request.method == 'POST':
-        user = CustumUser.objects.get(username=request.user)
-        group = Class.objects.get(code=request.POST.get('code'))
-        group.students.add(user)
-        group.save()
-        user.hasGroup = True
-        user.save()
-
-        return HttpResponseRedirect('/')
-
-    return render(request, 'class_room/join_group.html', {'groupCnt' : len(Class.objects.filter())})
-
 def search_group(request):
 
     if request.method == 'GET':

@@ -36,45 +36,28 @@
 
         <br><br><br><br><br>
 
-        {% for i in posts %}
-            <div class="container" style="width: 800px; height: auto; background-color: white;"><br>
-                <div class="" style="margin-left: 40px;" id="content">
-                    <span style="color: #5b5a5b; font-size: 30px;">{{ i.title }}</span><br>
-                    <span style="color: #e0e0e0; font-size: 20px;">{{ i.author.name }}</span>
+        <div class="container" style="width: 800px; height: auto; background-color: white;"><br>
+            <div class="" style="margin-left: 40px;" id="content">
+                <form class="input-field" id="post-form" method="post">
+                    {% csrf_token %}
+                    <input type="text" style="color: #5b5a5b; width: 300px; font-size: 30px;" name="title" placeholder="제목을 입력하세요."><br>
+                    <span style="color: #e0e0e0; font-size: 20px;">{{ user.name }}</span>
                     <br><br>
-                    <span style="color: grey; font-size: 15px;">{{ i.text|linebreaksbr }}</span>
-                </div>
-                <br>
-                <hr style="width: 750px; border: solid 1px #e0e0e0"><br>
-                <div class="" style="margin-left: 40px;" id="comment-box">
-                    {% for j in i.comment.all %}
-
-                        <div class="" id="comment">
-                            <span style="color: grey; font-size: 15px;">{{ j.writer.name }}</span><br>
-                            <span style="color: grey; font-size: 20px;">{{ j.text }}</span>
-                        </div><br>
-
-                    {% endfor %}
-
-                    <form class="input-field" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="pk" value={{ i.pk }}>
-                        <input type="text" style="width: 600px;" name="text" placeholder="댓글을 써주세요.">
-                        <button class="btn waves-effect waves-light deep-purple" type="submit">댓글쓰기</button>
-                    </form>
-
-                </div>
-                <br>
+                    <textarea name="text" style="color: grey; font-size: 15px; width: 700px; height: 300px;" form="post-form" rows="8" cols="40"></textarea>
+                    <br><br>
+                    <button class="btn waves-effect waves-light deep-purple" style="margin-left: 300px;" type="submit" name="action">게시</button>
+                </form>
             </div>
-            <br><br>
-        {% endfor %}
+            <br>
+        </div>
+        <br><br>
 
         <ul id="slide-out" class="side-nav">
             <!-- <li><a class="waves-effect modal-trigger" href="#modal1">글쓰기</a></li> -->
-            <li><a class="waves-effect" href="/new_post/">글쓰기</a></li>
+            <li><a class="waves-effect" href="#!">글쓰기</a></li>
             <li><a class="waves-effect" href="#!">게시판</a></li>
             <li><a class="waves-effect" href="#!">설정</a></li>
-            <li><a class="waves-effect" href="/accounts/logout/">로그아웃</a></li>
+            <li><a class="waves-effect" href="#!">로그아웃</a></li>
         </ul>
 
         <!-- Modal Structure -->

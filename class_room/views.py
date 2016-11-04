@@ -2,57 +2,63 @@
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import Class
+from .forms import Class, PostForm, CommentForm
 from django.contrib.auth import authenticate,login, models
 from accounts.models import CustumUser
+from .models import Post, Comment
 
 # Create your views here.
 def index(request):
 
-    try:
-        user = CustumUser.objects.get(username=request.user)
+    # try:
+    user = CustumUser.objects.get(username=request.user)
 
-        if user.hasGroup == True:
+    if user.hasGroup == True:
 
-            if user.job == 'teacher':
-                group = Class.objects.get(teacher=user.username)
+        if user.job == 'teacher':
+            group = Class.objects.get(teacher=user)
 
-            else:
-                group = Class.objects.all().filter(students=user)[0]
+        else:
+            group = Class.objects.all().filter(students=user)[0]
 
-            if request.method == 'POST':
-                form = PostForm(request.POST)
-                post = form.save(commit=False)
-                post.author = request.user
-                post.save()
-                group.post.add(post)
-                group.save()
+        if request.method == 'POST':
+            print(request.POST)
+            form = CommentForm(request.POST)
+            comment = form.save(commit=False)
+            comment.writer = CustumUser.objects.get(username=request.user)
+            comment.save()
+            group.post.get(pk=request.POST.get('pk')).comment.add(comment)
+            group.save()
 
-            return render(request, 'class_room/mygroup.html', {'group': group})
+            return HttpResponseRedirect('/')
 
-        else :
-            return render(request, 'class_room/index.html', {'user': user})
+        posts = group.post.filter().order_by('-pk')
 
-    except:
-        return HttpResponseRedirect('accounts/login')
+        return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts})
 
+    else :
+        return render(request, 'class_room/index.html', {'user': user})
+
+    # except:
+    #     return HttpResponseRedirect('/accounts/login')
 
 def make_group(request):
     user = CustumUser.objects.get(username=request.user)
-    form = Class(teacher=user, code=request.POST.get('code'), name=request.POST.get('name'))
+    print(user)
 
     if user.job == 'teacher':
         if request.method == 'POST':
+            form = Class(teacher=user, code=request.POST.get('code'), name=request.POST.get('name'))
             newClass = form.save()
 
         else:
             form = Class()
 
         group = Class.objects.filter().order_by('name')
-        user.hasGroup = True
-        user.save()
 
         if user.hasGroup is False:
+            user.hasGroup = True
+            user.save()
             return render(request, 'class_room/make_group.html', {'form' : form, 'groupCnt' : len(group)})
 
     return HttpResponseRedirect('/')
@@ -81,3 +87,48 @@ def search_group(request):
         group.save()
 
         return render(request, 'class_room/request_finish.html')
+
+def new_post(request):
+
+    try:
+        user = CustumUser.objects.get(username=request.user)
+
+        if user.hasGroup == True:
+
+            if user.job == 'teacher':
+                group = Class.objects.get(teacher=user)
+
+            else:
+                group = Class.objects.all().filter(students=user)[0]
+
+            if request.method == 'POST':
+                form = PostForm(request.POST)
+                post = form.save(commit=False)
+                post.author = CustumUser.objects.get(username=request.user)
+                post.save()
+                group.post.add(post)
+                group.save()
+
+                return HttpResponseRedirect('/')
+
+            return render(request, 'class_room/new_post.html', {'group': group, 'user': user})
+
+        else :
+            return render(request, 'class_room/index.html', {'user': user})
+
+    except:
+        return HttpResponseRedirect('/accounts/login')
+
+def exit_group(request):
+    user = CustumUser.objects.get(username=request.user)
+
+    if user.job == 'teacher':
+        Class.objects.get(teacher=user).delete()
+
+    else:
+        Class.objects.all().filter(students=user)[0].delete()
+
+    user.hasGroup = False
+    user.save()
+
+    return HttpResponseRedirect('/')

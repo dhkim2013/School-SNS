@@ -16,7 +16,9 @@ def register(request):
     if request.method == 'POST':
 
         if form.is_valid():
-            newUser = form.save()
+            newUser = form.save(commit=False)
+            newUser.hasGroup = False
+            newUser.save()
             username = request.POST['username']
             password = request.POST['password1']
             user = authenticate(username=username, password=password)

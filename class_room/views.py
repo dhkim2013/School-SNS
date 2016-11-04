@@ -153,6 +153,7 @@ def setting(request):
 
     if request.GET.get('accept') == '1':
         user = CustumUser.objects.get(username=group.requestUser.get(pk=request.GET.get('pk')).username)
+
         if user.hasGroup == False:
             user.hasGroup = True
             group.requestUser.get(pk=request.GET.get('pk')).delete()
@@ -161,10 +162,13 @@ def setting(request):
             group.save()
 
     if request.GET.get('accept') == '0':
+        user = CustumUser.objects.get(username=group.requestUser.get(pk=request.GET.get('pk')).username)
+
         if user.hasGroup == False:
-            user = CustumUser.objects.get(username=group.requestUser.get(pk=request.GET.get('pk')).username)
             group.requestUser.get(pk=request.GET.get('pk')).delete()
             user.save()
             group.save()
 
-    return render(request, 'class_room/setting_group.html', {'group': group, 'user': reqUser})
+    me = CustumUser.objects.get(username=request.user)
+
+    return render(request, 'class_room/setting_group.html', {'group': group, 'user': reqUser, 'me': me})

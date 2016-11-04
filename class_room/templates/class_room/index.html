@@ -56,9 +56,9 @@
                 {% if user.job == "teacher" %}
                     <a href="{% url 'class_room:make_group' %}" class="waves-effect waves-light deep-purple btn" style="width: 150px;">만들기</a>
                     &nbsp;&nbsp;&nbsp;
-                {% endif %}
+                {% else %}
                 <a href="{% url 'class_room:search_group' %}" class="waves-effect waves-light white btn" style="color: black; width: 150px;">검색하기</a>
-
+                {% endif %}
             </div>
         </div>
 

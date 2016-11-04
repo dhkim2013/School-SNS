@@ -10,37 +10,37 @@ from .models import Post, Comment
 # Create your views here.
 def index(request):
 
-    # try:
-    user = CustumUser.objects.get(username=request.user)
+    try:
+        user = CustumUser.objects.get(username=request.user)
 
-    if user.hasGroup == True:
+        if user.hasGroup == True:
 
-        if user.job == 'teacher':
-            group = Class.objects.get(teacher=user)
+            if user.job == 'teacher':
+                group = Class.objects.get(teacher=user)
 
-        else:
-            group = Class.objects.all().filter(students=user)[0]
+            else:
+                group = Class.objects.all().filter(students=user)[0]
 
-        if request.method == 'POST':
-            print(request.POST)
-            form = CommentForm(request.POST)
-            comment = form.save(commit=False)
-            comment.writer = CustumUser.objects.get(username=request.user)
-            comment.save()
-            group.post.get(pk=request.POST.get('pk')).comment.add(comment)
-            group.save()
+            if request.method == 'POST':
+                print(request.POST)
+                form = CommentForm(request.POST)
+                comment = form.save(commit=False)
+                comment.writer = CustumUser.objects.get(username=request.user)
+                comment.save()
+                group.post.get(pk=request.POST.get('pk')).comment.add(comment)
+                group.save()
 
-            return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/')
 
-        posts = group.post.filter().order_by('-pk')
+            posts = group.post.filter().order_by('-pk')
 
-        return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts})
+            return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts})
 
-    else :
-        return render(request, 'class_room/index.html', {'user': user})
+        else :
+            return render(request, 'class_room/index.html', {'user': user})
 
-    # except:
-    #     return HttpResponseRedirect('/accounts/login')
+    except:
+        return HttpResponseRedirect('/accounts/login')
 
 def make_group(request):
     user = CustumUser.objects.get(username=request.user)
@@ -120,15 +120,51 @@ def new_post(request):
         return HttpResponseRedirect('/accounts/login')
 
 def exit_group(request):
+
+    print(request.user)
+
+    user = CustumUser.objects.get(username=request.user)
+
+    if user.hasGroup == True:
+
+        if user.job == 'teacher':
+            print('teacher')
+            Class.objects.get(teacher=user).delete()
+
+        else:
+            print('student')
+            Class.objects.all().filter(students=user)[0].students.get(username=user.username).delete()
+
+        user.hasGroup = False
+        user.save()
+
+    return HttpResponseRedirect('/')
+
+def setting(request):
     user = CustumUser.objects.get(username=request.user)
 
     if user.job == 'teacher':
-        Class.objects.get(teacher=user).delete()
+        group = Class.objects.get(teacher=user)
 
     else:
-        Class.objects.all().filter(students=user)[0].delete()
+        group = Class.objects.all().filter(students=user)[0]
 
-    user.hasGroup = False
-    user.save()
+    reqUser = group.requestUser.all()
 
-    return HttpResponseRedirect('/')
+    if request.GET.get('accept') == '1':
+        user = CustumUser.objects.get(username=group.requestUser.get(pk=request.GET.get('pk')).username)
+        if user.hasGroup == False:
+            user.hasGroup = True
+            group.requestUser.get(pk=request.GET.get('pk')).delete()
+            group.students.add(user)
+            user.save()
+            group.save()
+
+    if request.GET.get('accept') == '0':
+        if user.hasGroup == False:
+            user = CustumUser.objects.get(username=group.requestUser.get(pk=request.GET.get('pk')).username)
+            group.requestUser.get(pk=request.GET.get('pk')).delete()
+            user.save()
+            group.save()
+
+    return render(request, 'class_room/setting_group.html', {'group': group, 'user': reqUser})

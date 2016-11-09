@@ -2,10 +2,10 @@
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import Class, PostForm, CommentForm
+from .forms import PostForm, CommentForm
 from django.contrib.auth import authenticate,login, models
 from accounts.models import CustumUser
-from .models import Post, Comment
+from .models import Post, Comment, Class
 
 # Create your views here.
 def index(request):

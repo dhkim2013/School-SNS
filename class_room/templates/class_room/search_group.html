@@ -1,0 +1,133 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>청어</title>
+
+        <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+
+    <style media="screen">
+            html, body{
+                margin: 0;
+                padding: 0;
+
+                min-width: 100%;
+                width: 100%;
+                max-width: 100%;
+
+                min-height: 100%;
+                height: 100%;
+                max-height: 100%;
+            }
+
+            #valign-wrapper {
+                margin: 0;
+                padding: 0;
+
+                min-width: 100%;
+                width: 100%;
+                max-width: 100%;
+
+                min-height: 100%;
+                height: 100%;
+                max-height: 100%;
+            }
+
+            .input-field input[type=text]:focus {
+                border-bottom: 1px solid #673fb4;
+                box-shadow: 0 1px 0 0 #000;
+            }
+            [type="radio"].with-gap:checked + label:before {
+                border-radius: 50%;
+                border: 2px solid #673fb4;
+            }
+
+            [type="radio"].with-gap + label:before {
+                border-radius: 50%;
+                border: 2px solid #d1d1d1;
+            }
+
+            [type="radio"].with-gap:checked + label:after {
+                border-radius: 50%;
+                border: 2px solid #673fb4;
+                background-color: #673fb4;
+                z-index: 0;
+                -webkit-transform: scale(.5);
+                -moz-transform: scale(.5);
+                -ms-transform: scale(.5);
+                -o-transform: scale(.5);
+                transform: scale(.5);
+            }
+    </style>
+
+    <body>
+        <div class="valign-wrapper" id="valign-wrapper">
+            <div class="valign center container" id="search-box" style="background-color: white; width: 500px; height: auto;">
+                <br><br>
+                <span style="color: #bebbbe; font-size: 30px;">그룹찾기</span>
+
+                <form class="input-field" method="get">
+                    {% csrf_token %}
+
+                    <input type="text" name="code" style="width: 250px;" placeholder="그룹 코드(5자리)를 입력해주세요.">
+                    <button style="width: 100px;" class="btn waves-effect waves-light deep-purple" type="submit" name="action">검색</button>
+
+                </form>
+
+                <form class="input-field" method="post">
+                    {% csrf_token %}
+
+                    <div id="group-list" style="height: 300px; width: 400px; margin-left: 50px; overflow: scroll;">
+                        {% if result %}
+                            {% for i in result %}
+                            <p>
+                                <input type="radio" class="with-gap left" name="pk" value={{ i.pk }} id={{ i.pk }}>
+                                <label for={{ i.pk }}><span style="font-size: 40px; text-align: left;" class="">{{ i.name }}</span></label>
+                            </p>
+
+                            {% endfor %}
+
+                        {% else %}
+                            <span style="color: #bebbbe;">검색 결과가 없습니다.</span>
+                        {% endif %}
+                    </div>
+
+                    <br>
+                    <a href="{% url 'class_room:index' %}" class="waves-effect waves-light deep-purple btn">돌아가기</a>
+                    <button class="btn waves-effect waves-light deep-purple" type="submit" name="action">가입요청</button>
+                    <br><br>
+
+                </form>
+
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(() => {
+                setBackground();
+            });
+
+            function setBackground() {
+                randomInt = Math.floor( (Math.random() * (3 - 0 + 1)) + 0 );
+
+                data = [`url("{% static 'images/background1.png' %}") no-repeat center center fixed`,
+                        `url("{% static 'images/background2.png' %}") no-repeat center center fixed`,
+                        `url("{% static 'images/background3.png' %}") no-repeat center center fixed`,
+                        `url("{% static 'images/background4.png' %}") no-repeat center center fixed`,
+                    ];
+
+                $('html').css('background', data[randomInt]);
+                $('html').css('-webkit-background-size', 'cover');
+                $('html').css('-moz-background-size', 'cover');
+                $('html').css('-o-background-size', 'cover');
+                $('html').css('background-size', 'cover');
+            }
+        </script>
+    </body>
+</html>

@@ -128,11 +128,15 @@ def exit_group(request):
     if user.hasGroup == True:
 
         if user.job == 'teacher':
-            print('teacher')
-            Class.objects.get(teacher=user).delete()
+            myClass = Class.objects.get(teacher=user)
+
+            for i in myClass.students.all():
+                i.hasGroup = False
+                i.save()
+
+            myClass.delete()
 
         else:
-            print('student')
             Class.objects.all().filter(students=user)[0].students.get(username=user.username).delete()
 
         user.hasGroup = False
@@ -147,28 +151,26 @@ def setting(request):
         group = Class.objects.get(teacher=user)
 
     else:
-        group = Class.objects.all().filter(students=user)[0]
+        group = Class.objects.all().get(students=user)
 
-    reqUser = group.requestUser.all()
+    reqUserList = group.requestUser.all()
 
     if request.GET.get('accept') == '1':
-        user = CustumUser.objects.get(username=group.requestUser.get(pk=request.GET.get('pk')).username)
+        reqUser = CustumUser.objects.get(pk=request.GET.get('pk'))
 
-        if user.hasGroup == False:
-            user.hasGroup = True
+        if reqUser.hasGroup == False:
+            reqUser.hasGroup = True
             group.requestUser.get(pk=request.GET.get('pk')).delete()
-            group.students.add(user)
-            user.save()
+            group.students.add(reqUser)
+            reqUser.save()
             group.save()
 
     if request.GET.get('accept') == '0':
-        user = CustumUser.objects.get(username=group.requestUser.get(pk=request.GET.get('pk')).username)
+        reqUser = CustumUser.objects.get(pk=request.GET.get('pk'))
 
-        if user.hasGroup == False:
+        if reqUser.hasGroup == False:
             group.requestUser.get(pk=request.GET.get('pk')).delete()
-            user.save()
+            reqUser.save()
             group.save()
 
-    me = CustumUser.objects.get(username=request.user)
-
-    return render(request, 'class_room/setting_group.html', {'group': group, 'user': reqUser, 'me': me})
+    return render(request, 'class_room/setting_group.html', {'group': group, 'user': reqUserList, 'me': user})

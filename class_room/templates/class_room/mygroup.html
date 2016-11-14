@@ -40,8 +40,27 @@
         {% for i in posts %}
             <div class="container" style="width: 800px; height: auto; background-color: white;"><br>
                 <div class="" style="margin-left: 40px;" id="content">
-                    <span style="color: #5b5a5b; font-size: 30px;">{{ i.title }}</span><br>
-                    <span style="color: #e0e0e0; font-size: 20px;">{{ i.author.name }}</span>
+
+                    <div id="post-info">
+
+                        <div id="image-field" style="display: inline-block;">
+                            <img class="circle responsive-img" src="{{ i.author.profileImage.url }}" style="width: 70px; height: 70px;">
+                        </div>
+
+                        <div id="text-field" style="display: inline-block; margin-left: 20px;">
+
+                            <div id="writer" style="height: 50px;">
+                                <span style="color: #5b5a5b; font-size: 30px;">{{ i.title }}</span>
+                            </div>
+
+                            <div id="text" style="hetigh: 30px; width: 600px; overflow: scroll;">
+                                <span style="color: #e0e0e0; font-size: 20px;">{{ i.author.name }}</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                     <br><br>
                     <span style="color: grey; font-size: 15px;">{{ i.text|linebreaksbr }}</span>
                 </div>
@@ -50,9 +69,20 @@
                 <div class="" style="margin-left: 40px;" id="comment-box">
                     {% for j in i.comment.all %}
 
-                        <div class="" id="comment">
-                            <span style="color: grey; font-size: 15px;">{{ j.writer.name }}</span><br>
-                            <span style="color: grey; font-size: 20px;">{{ j.text }}</span>
+                        <div class="" id="comment" style="width: 700px; height: 60px;">
+                            <div id="image-field" style="display: inline-block;">
+                                <div id="image" style="height: 60px;">
+                                    <img class="circle responsive-img" src="{{ j.writer.profileImage.url }}" style="width: 50px; height: 50px;">
+                                </div>
+                            </div>
+                            <div id="text-field" style="display: inline-block; margin-left: 10px;">
+                                <div id="writer">
+                                    <span style="color: grey; font-size: 15px;">{{ j.writer.name }}</span>
+                                </div>
+                                <div id="text" style="hetigh: 30px; width: 600px; overflow: scroll;">
+                                    <span style="color: grey; font-size: 20px;">{{ j.text }}</span>
+                                </div>
+                            </div>
                         </div><br>
 
                     {% endfor %}

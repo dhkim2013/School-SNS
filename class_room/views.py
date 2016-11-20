@@ -12,42 +12,43 @@ from django.db.models import Q
 # Create your views here.
 def index(request):
 
-    # try:
-    user = CustumUser.objects.get(username=request.user)
+    try:
+        user = CustumUser.objects.get(username=request.user)
 
-    if user.hasGroup == True:
+        if user.hasGroup == True:
 
-        if user.job == 'teacher':
-            group = Class.objects.get(teacher=user)
-
-        else:
-            group = Class.objects.all().filter(students=user)[0]
-
-        if request.method == 'POST':
-
-            if request.POST['keyword']:
-                posts = group.post.filter(Q(title__contains=request.POST['keyword'])).order_by('-pk')
-                return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
+            if user.job == 'teacher':
+                group = Class.objects.get(teacher=user)
 
             else:
-                form = CommentForm(request.POST)
-                comment = form.save(commit=False)
-                comment.writer = CustumUser.objects.get(username=request.user)
-                comment.save()
-                group.post.get(pk=request.POST.get('pk')).comment.add(comment)
-                group.save()
+                group = Class.objects.all().filter(students=user)[0]
 
-                return HttpResponseRedirect('/')
+            if request.method == 'POST':
 
-        posts = group.post.filter().order_by('-pk')
+                if request.POST['keyword']:
+                    posts = group.post.filter(Q(title__contains=request.POST['keyword'])).order_by('-pk')
 
-        return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
+                    return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
 
-    else :
-        return render(request, 'class_room/index.html', {'user': user})
+                else:
+                    form = CommentForm(request.POST)
+                    comment = form.save(commit=False)
+                    comment.writer = CustumUser.objects.get(username=request.user)
+                    comment.save()
+                    group.post.get(pk=request.POST.get('pk')).comment.add(comment)
+                    group.save()
 
-    # except:
-    #     return HttpResponseRedirect('/accounts/login')
+                    return HttpResponseRedirect('/')
+
+            posts = group.post.filter().order_by('-pk')
+
+            return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
+
+        else :
+            return render(request, 'class_room/index.html', {'user': user})
+
+    except:
+        return HttpResponseRedirect('/accounts/login')
 
 def make_group(request):
     user = CustumUser.objects.get(username=request.user)
@@ -203,24 +204,82 @@ def handle_uploaded_file(f, name):
             for chunk in f.chunks():
                 destination.write(chunk)
 
-def profile(request):
-    user = CustumUser.objects.get(username=request.user)
+def notice(request):
 
-    if user.job == 'teacher':
-        group = Class.objects.get(teacher=user)
+    try:
+        user = CustumUser.objects.get(username=request.user)
 
-    else:
-        group = Class.objects.all().get(students=user)
+        if user.hasGroup == True:
 
-    if request.method == 'POST':
+            if user.job == 'teacher':
+                group = Class.objects.get(teacher=user)
 
-        print(request.FILES[profileImage])
-        if request.FILES.get('profileImage') is not None:
-            handle_uploaded_file(request.FILES.get('profileImage'), user.username)
-            user.profileImage = 'profiles/' + user.username + '.jpg'
-            print('test')
+            else:
+                group = Class.objects.all().filter(students=user)[0]
 
-        user.introduce = request.POST.get('introduce')
-        user.save()
+            if request.method == 'POST':
 
-    return render(request, 'class_room/profile.html', {'group': group, 'user': user})
+                if request.POST['keyword']:
+                    posts = group.post.filter(Q(title__contains=request.POST['keyword'])).filter(author__job='teacher').order_by('-pk')
+
+                    return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
+
+                else:
+                    form = CommentForm(request.POST)
+                    comment = form.save(commit=False)
+                    comment.writer = CustumUser.objects.get(username=request.user)
+                    comment.save()
+                    group.post.get(pk=request.POST.get('pk')).comment.add(comment)
+                    group.save()
+
+                    return HttpResponseRedirect('/')
+
+            posts = group.post.filter(author__job='teacher').order_by('-pk')
+
+            return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
+
+        else :
+            return render(request, 'class_room/index.html', {'user': user})
+
+    except:
+        return HttpResponseRedirect('/accounts/login')
+
+def board(request):
+
+    try:
+        user = CustumUser.objects.get(username=request.user)
+
+        if user.hasGroup == True:
+
+            if user.job == 'teacher':
+                group = Class.objects.get(teacher=user)
+
+            else:
+                group = Class.objects.all().filter(students=user)[0]
+
+            if request.method == 'POST':
+
+                if request.POST['keyword']:
+                    posts = group.post.filter(Q(title__contains=request.POST['keyword'])).filter(author__job='student').order_by('-pk')
+
+                    return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
+
+                else:
+                    form = CommentForm(request.POST)
+                    comment = form.save(commit=False)
+                    comment.writer = CustumUser.objects.get(username=request.user)
+                    comment.save()
+                    group.post.get(pk=request.POST.get('pk')).comment.add(comment)
+                    group.save()
+
+                    return HttpResponseRedirect('/')
+
+            posts = group.post.filter(author__job='student').order_by('-pk')
+
+            return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
+
+        else :
+            return render(request, 'class_room/index.html', {'user': user})
+
+    except:
+        return HttpResponseRedirect('/accounts/login')

@@ -7,5 +7,7 @@ urlpatterns = [
     url(r'^search_group/', views.search_group, name='search_group'),
     url(r'^new_post/', views.new_post, name='new_post'),
     url(r'^exit_group/', views.exit_group, name='exit_group'),
-    url(r'^setting/', views.setting, name='setting')
+    url(r'^setting/', views.setting, name='setting'),
+    url(r'^notice/', views.notice, name='notice'),
+    url(r'^board/', views.board, name='board')
 ]

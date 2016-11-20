@@ -122,7 +122,7 @@ def new_post(request):
             return render(request, 'class_room/new_post.html', {'group': group, 'user': user})
 
         else :
-            return render(request, 'class_room/index.html', {'user': user})
+            return render(request, 'class_room/index.html', {'user': user, 'group': group})
 
     except:
         return HttpResponseRedirect('/accounts/login')

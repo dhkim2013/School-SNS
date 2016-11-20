@@ -20,6 +20,24 @@
                 border-bottom: 1px solid #673fb4;
                 box-shadow: 0 1px 0 0 #000;
             }
+
+            .input-field input[type=text]:focus + label {
+                color: #673fb4;
+            }
+
+            .input-field textarea.materialize-textarea:focus{
+                border-bottom: 1px solid #673fb4;
+                box-shadow: 0 1px 0 0 #000;
+            }
+
+            .input-field textarea.materialize-textarea:focus + label{
+                color: #673fb4;
+            }
+
+            .input-field input[type=text].valid {
+                border-bottom: 1px solid #673fb4;
+                box-shadow: 0 1px 0 0 #000;
+            }
         </style>
 
     </head>
@@ -42,29 +60,35 @@
 
         <ul id="slide-out" class="side-nav">
             <!-- <li><a class="waves-effect modal-trigger" href="#modal1">글쓰기</a></li> -->
-            <li><a class="waves-effect" href="/new_post/">글쓰기</a></li>
-            <!-- <li><a class="waves-effect" href="#!">게시판</a></li> -->
-            <li><a class="waves-effect" href="/setting">설정</a></li>
-            <li><a class="waves-effect" href="/accounts/logout/">로그아웃</a></li>
+            <li>
+                <img style="position: absolute; margin-top: 20px; margin-left: 5px;" src="{% static 'images/search.png' %}" />
+                <form style="margin-left: 30px;" method="post">
+                    <div class="input-field">
+                        {% csrf_token %}
+                        <input style="width: 150px;" placeholder="검색" id="search" type="text" name="keyword" required>
+                    </div>
+                </form>
+            </li>
+            <li>
+                <img style="position: absolute; margin-top: 10px; margin-left: 0px; width: 30px; height: 30px;" src="{% static 'images/post.png' %}" />
+                <a class="waves-effect" href="/new_post/">글쓰기</a>
+            </li>
+            <li>
+                <img style="position: absolute; margin-top: 15px; margin-left: 7px; width: 19px; height: 19px;" src="{% static 'images/chat.png' %}" />
+                <a class="waves-effect" href="http://127.0.0.1:3000/{{ user.name }}">채팅</a>
+            </li>
+            <li>
+                <img style="position: absolute; margin-top: 15px; margin-left: 7px;" src="{% static 'images/setting.png' %}" />
+                <a class="waves-effect" href="/setting">설정</a>
+            </li>
+            <li>
+                <img style="position: absolute; margin-top: 15px; margin-left: 7px; width: 19px; height: 19px;" src="{% static 'images/logout.png' %}" />
+                <a class="waves-effect" href="/accounts/logout/">로그아웃</a>
+            </li>
         </ul>
 
-        <!-- Modal Structure -->
-        <div id="modal1" class="modal">
-            <div class="modal-content">
-                <h4>Modal Header</h4>
-                <p>A bunch of text</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-            </div>
-        </div>
 
         <script type="text/javascript">
-            $(document).ready(function(){
-                // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-                $('.modal-trigger').leanModal();
-            });
-
             $('#button-collapse').sideNav({
                 menuWidth: 200, // Default is 240
                 edge: 'right' // Choose the horizontal origin

@@ -5,13 +5,13 @@
 <div class="container" style="width: 800px; height: auto; background-color: white;">
 
     <div class="container" id="image-field">
-        <img class="responsive-img circle" src="{{ me.profileImage.url }}" style="width: 200px; height: 200px; position: absolute; left: 50%; margin-left: -100px; top: 100px;">
+        <img class="responsive-img circle" src="{{ user.profileImage.url }}" style="width: 200px; height: 200px; position: absolute; left: 50%; margin-left: -100px; top: 100px;">
     </div>
 
     <div class="container center" id="text-field" style="width: 100%;">
 
         <span style="font-size: 50px; display: inline-block; margin-top: 100px;" class="" id="name">
-            {{ me.name }}
+            {{ user.name }}
         </span>
 
     </div>
@@ -28,10 +28,24 @@
 
             <br>
 
-            {% if me.introduce == '' %}
-                <textarea name="introduce" value="" placeholder="자기소개를 입력해주세요." style="color: grey; font-size: 15px; width: 500px; height: 100px; border-radius: 5px;" form="post-form" rows="8" cols="40"></textarea>
+            {% if user.introduce == '' %}
+
+                <div class="row" style="margin-left: 200px;">
+                    <div class="input-field col s8">
+                        <textarea id="textarea1" form="post-form" name="introduce" class="materialize-textarea"></textarea>
+                        <label for="textarea1">자기소개</label>
+                    </div>
+                </div>
+
             {% else %}
-                <textarea name="introduce" style="color: grey; font-size: 15px; width: 500px; height: 100px; border-radius: 5px;" form="post-form" rows="8" cols="40">{{ me.introduce }}</textarea>
+
+                <div class="row" style="margin-left: 200px;">
+                    <div class="input-field col s8">
+                        <textarea id="textarea1" form="post-form" name="introduce" placeholder="{{ user.introduce }}" class="materialize-textarea"></textarea>
+                        <label for="textarea1">자기소개</label>
+                    </div>
+                </div>
+
             {% endif %}
             <br><br>
             <button class="btn waves-effect waves-light deep-purple" type="submit" name="action">변경</button>
@@ -41,10 +55,12 @@
     </div>
 </div>
 <br><br>
+
+{% if user.job == 'teacher' %}
 <div class="container center" style="width: 800px; height: auto; background-color: white;"><br>
     <span style="font-size: 25px;">그룹 요청</span><br><br>
 
-    {% for i in user %}
+    {% for i in reqUserList %}
         <div class="">
             <span class="left" style="margin-left: 60px; font-size: 20px;">{{ i.name }}</span>
             <div class="right" style="margin-right: 30px;">
@@ -55,6 +71,8 @@
     {% endfor %}
 </div>
 <br><br>
+{% endif %}
+
 <div class="container center valign-wrapper" style="width: 800px; height: 100px; background-color: white;"><br>
     <a class="valign waves-effect waves-light deep-purple btn" style="margin-left: 350px;" href="/exit_group">그룹 탈퇴</a>
 </div>

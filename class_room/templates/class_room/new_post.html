@@ -6,10 +6,21 @@
     <div class="" style="margin-left: 40px;" id="content">
         <form class="input-field" id="post-form" method="post">
             {% csrf_token %}
-            <input type="text" style="color: #5b5a5b; width: 300px; font-size: 30px;" name="title" placeholder="제목을 입력하세요."><br>
-            <span style="color: #e0e0e0; font-size: 20px;">{{ user.name }}</span>
+            <!-- <input type="text" style="color: #5b5a5b; width: 300px; font-size: 30px;" name="title" placeholder="제목을 입력하세요."><br> -->
+            <div class="row">
+                <div class="input-field col s5">
+                    <input style="font-size: 30px;" id="title" type="text" name="title" class="validate">
+                    <label for="title">제목</label>
+                </div>
+            </div>
+            <span style="color: #e0e0e0; font-size: 20px;">작성자 {{ user.name }}</span>
             <br><br>
-            <textarea name="text" style="color: grey; font-size: 15px; width: 700px; height: 300px;" form="post-form" rows="8" cols="40"></textarea>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea id="textarea1" form="post-form" name="text" class="materialize-textarea"></textarea>
+                    <label for="textarea1">본문</label>
+                </div>
+            </div>
             <br><br>
             <button class="btn waves-effect waves-light deep-purple" style="margin-left: 300px;" type="submit" name="action">게시</button>
         </form>

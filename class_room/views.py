@@ -7,23 +7,29 @@ from accounts.forms import ProfileForm
 from django.contrib.auth import authenticate,login, models
 from accounts.models import CustumUser
 from .models import Post, Comment, Class
+from django.db.models import Q
 
 # Create your views here.
 def index(request):
 
-    try:
-        user = CustumUser.objects.get(username=request.user)
+    # try:
+    user = CustumUser.objects.get(username=request.user)
 
-        if user.hasGroup == True:
+    if user.hasGroup == True:
 
-            if user.job == 'teacher':
-                group = Class.objects.get(teacher=user)
+        if user.job == 'teacher':
+            group = Class.objects.get(teacher=user)
+
+        else:
+            group = Class.objects.all().filter(students=user)[0]
+
+        if request.method == 'POST':
+
+            if request.POST['keyword']:
+                posts = group.post.filter(Q(title__contains=request.POST['keyword'])).order_by('-pk')
+                return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
 
             else:
-                group = Class.objects.all().filter(students=user)[0]
-
-            if request.method == 'POST':
-                print(request.POST)
                 form = CommentForm(request.POST)
                 comment = form.save(commit=False)
                 comment.writer = CustumUser.objects.get(username=request.user)
@@ -33,15 +39,15 @@ def index(request):
 
                 return HttpResponseRedirect('/')
 
-            posts = group.post.filter().order_by('-pk')
+        posts = group.post.filter().order_by('-pk')
 
-            return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts})
+        return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
 
-        else :
-            return render(request, 'class_room/index.html', {'user': user})
+    else :
+        return render(request, 'class_room/index.html', {'user': user})
 
-    except:
-        return HttpResponseRedirect('/accounts/login')
+    # except:
+    #     return HttpResponseRedirect('/accounts/login')
 
 def make_group(request):
     user = CustumUser.objects.get(username=request.user)
@@ -166,6 +172,8 @@ def setting(request):
             reqUser.save()
             group.save()
 
+        return HttpResponseRedirect('/setting')
+
     if request.GET.get('accept') == '0':
         reqUser = CustumUser.objects.get(pk=request.GET.get('pk'))
 
@@ -174,13 +182,17 @@ def setting(request):
             reqUser.save()
             group.save()
 
+        return HttpResponseRedirect('/setting')
+
     if request.method == 'POST':
         handle_uploaded_file(request.FILES.get('profileImage'), user.username)
         user.profileImage = 'profiles/' + user.username + '.jpg'
         user.introduce = request.POST.get('introduce')
         user.save()
 
-    return render(request, 'class_room/setting_group.html', {'group': group, 'user': reqUserList, 'me': user})
+        return HttpResponseRedirect('/setting')
+
+    return render(request, 'class_room/setting_group.html', {'group': group, 'reqUserList': reqUserList, 'user': user})
 
 def handle_uploaded_file(f, name):
 

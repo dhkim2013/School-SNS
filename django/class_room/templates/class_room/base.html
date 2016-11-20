@@ -2,6 +2,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+        <meta http-equiv="Expires" content="-1">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
         <meta charset="utf-8">
         <title>청어</title>
 
@@ -47,7 +51,7 @@
             <div class="nav-wrapper" style="background-color: white;">
                 <img src="{% static 'images/logo.png' %}" alt="" style="width: 50px; height: 50px; margin-left: 5px; margin-top: 5px;"/>
 
-                <a href="/" class="brand-logo center" style="color: grey;">{{ group.name }}</a>
+                <a href="/?ts=2000-01-01" class="brand-logo center" style="color: grey;">{{ group.name }}</a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li><a href="#" data-activates="slide-out" id="button-collapse"><i style="color: black;" class="material-icons">menu</i></a></li>
                 </ul>
@@ -62,7 +66,7 @@
             <!-- <li><a class="waves-effect modal-trigger" href="#modal1">글쓰기</a></li> -->
             <li>
                 <img style="position: absolute; margin-top: 20px; margin-left: 5px;" src="{% static 'images/search.png' %}" />
-                <form style="margin-left: 30px;" method="post">
+                <form style="margin-left: 30px;" method="post" id="search">
                     <div class="input-field">
                         {% csrf_token %}
                         <input style="width: 150px;" placeholder="검색" id="search" type="text" name="keyword" required>
@@ -75,11 +79,11 @@
             </li>
             <li>
                 <img style="position: absolute; margin-top: 15px; margin-left: 7px; width: 19px; height: 19px;" src="{% static 'images/notice.png' %}" />
-                <a class="waves-effect" href="/notice">공지사항</a>
+                <a class="waves-effect" href="/notice?ts=2000-01-01">공지사항</a>
             </li>
             <li>
                 <img style="position: absolute; margin-top: 15px; margin-left: 7px; width: 19px; height: 19px;" src="{% static 'images/board.png' %}" />
-                <a class="waves-effect" href="/board">게시판</a>
+                <a class="waves-effect" href="/board?ts=2000-01-01">게시판</a>
             </li>
             <li>
                 <img style="position: absolute; margin-top: 15px; margin-left: 7px; width: 19px; height: 19px;" src="{% static 'images/chat.png' %}" />
@@ -87,7 +91,7 @@
             </li>
             <li>
                 <img style="position: absolute; margin-top: 15px; margin-left: 7px;" src="{% static 'images/setting.png' %}" />
-                <a class="waves-effect" href="/setting">설정</a>
+                <a class="waves-effect" href="/setting?ts=2000-01-01">설정</a>
             </li>
             <li>
                 <img style="position: absolute; margin-top: 15px; margin-left: 7px; width: 19px; height: 19px;" src="{% static 'images/logout.png' %}" />

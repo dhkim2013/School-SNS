@@ -25,7 +25,7 @@ def register(request):
 
             if user is not None:
                 auth_login(request, user)
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/?ts=2000-01-01')
 
     else:
         form = UserCreateForm()
@@ -42,7 +42,7 @@ def login(request):
 
         if user is not None:
             auth_login(request, user)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/?ts=2000-01-01')
 
         else:
             return render(request, 'accounts/login.html', {'error': '아이디 또는 비밀번호가 틀렸습니다.'})

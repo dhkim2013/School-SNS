@@ -2,6 +2,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+        <meta http-equiv="Expires" content="-1">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
         <meta charset="utf-8">
         <title>청어</title>
 
@@ -67,7 +71,7 @@
                     {% csrf_token %}
 
                     <input type="text" name="name" placeholder="그룹명을 입력하세요.(10자 이내)" style="width: 300px;" maxlength="10"><br>
-                    <input type="text" name="code" placeholder="5자리의 숫자코드를 입력하세요." style="width: 300px"><br><br>
+                    <input type="text" name="code" placeholder="숫자코드를 입력하세요." style="width: 300px"><br><br>
                     <button style="width: 280px;" class="btn waves-effect waves-light deep-purple" type="submit" name="action">확인</button>
 
                 </form>

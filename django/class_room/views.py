@@ -25,12 +25,12 @@ def index(request):
 
             if request.method == 'POST':
 
-                if request.POST['keyword']:
+                try:
                     posts = group.post.filter(Q(title__contains=request.POST['keyword'])).order_by('-pk')
 
                     return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
 
-                else:
+                except:
                     form = CommentForm(request.POST)
                     comment = form.save(commit=False)
                     comment.writer = CustumUser.objects.get(username=request.user)
@@ -38,7 +38,7 @@ def index(request):
                     group.post.get(pk=request.POST.get('pk')).comment.add(comment)
                     group.save()
 
-                    return HttpResponseRedirect('/')
+                    return HttpResponseRedirect('/?ts=2000-01-01')
 
             posts = group.post.filter().order_by('-pk')
 
@@ -117,7 +117,7 @@ def new_post(request):
                 group.post.add(post)
                 group.save()
 
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/?ts=2000-01-01')
 
             return render(request, 'class_room/new_post.html', {'group': group, 'user': user})
 
@@ -173,7 +173,7 @@ def setting(request):
             reqUser.save()
             group.save()
 
-        return HttpResponseRedirect('/setting')
+        return HttpResponseRedirect('/setting?ts=2000-01-01')
 
     if request.GET.get('accept') == '0':
         reqUser = CustumUser.objects.get(pk=request.GET.get('pk'))
@@ -183,7 +183,7 @@ def setting(request):
             reqUser.save()
             group.save()
 
-        return HttpResponseRedirect('/setting')
+        return HttpResponseRedirect('/setting?ts=2000-01-01')
 
     if request.method == 'POST':
         handle_uploaded_file(request.FILES.get('profileImage'), user.username)
@@ -191,7 +191,7 @@ def setting(request):
         user.introduce = request.POST.get('introduce')
         user.save()
 
-        return HttpResponseRedirect('/setting')
+        return HttpResponseRedirect('/setting?ts=2000-01-01')
 
     return render(request, 'class_room/setting_group.html', {'group': group, 'reqUserList': reqUserList, 'user': user})
 
@@ -232,7 +232,7 @@ def notice(request):
                     group.post.get(pk=request.POST.get('pk')).comment.add(comment)
                     group.save()
 
-                    return HttpResponseRedirect('/')
+                    return HttpResponseRedirect('/?ts=2000-01-01')
 
             posts = group.post.filter(author__job='teacher').order_by('-pk')
 
@@ -272,7 +272,7 @@ def board(request):
                     group.post.get(pk=request.POST.get('pk')).comment.add(comment)
                     group.save()
 
-                    return HttpResponseRedirect('/')
+                    return HttpResponseRedirect('/?ts=2000-01-01')
 
             posts = group.post.filter(author__job='student').order_by('-pk')
 

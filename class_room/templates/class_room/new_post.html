@@ -1,88 +1,21 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>청어</title>
+{% extends 'class_room/base.html' %}
 
-        <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-    	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% block content %}
 
-        <style media="screen">
-            body {
-                background-color: #f8f7f8;
-            }
+<div class="container" style="width: 800px; height: auto; background-color: white;"><br>
+    <div class="" style="margin-left: 40px;" id="content">
+        <form class="input-field" id="post-form" method="post">
+            {% csrf_token %}
+            <input type="text" style="color: #5b5a5b; width: 300px; font-size: 30px;" name="title" placeholder="제목을 입력하세요."><br>
+            <span style="color: #e0e0e0; font-size: 20px;">{{ user.name }}</span>
+            <br><br>
+            <textarea name="text" style="color: grey; font-size: 15px; width: 700px; height: 300px;" form="post-form" rows="8" cols="40"></textarea>
+            <br><br>
+            <button class="btn waves-effect waves-light deep-purple" style="margin-left: 300px;" type="submit" name="action">게시</button>
+        </form>
+    </div>
+    <br>
+</div>
+<br><br>
 
-            .input-field input[type=text]:focus {
-                border-bottom: 1px solid #673fb4;
-                box-shadow: 0 1px 0 0 #000;
-            }
-        </style>
-
-    </head>
-    <body>
-
-        <nav style="position: fixed;">
-            <div class="nav-wrapper" style="background-color: white;">
-                <img src="{% static 'images/logo.png' %}" alt="" style="width: 50px; height: 50px; margin-left: 5px; margin-top: 5px;"/>
-
-                <a href="/" class="brand-logo center" style="color: grey;">{{ group.name }}</a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="#" data-activates="slide-out" id="button-collapse"><i style="color: black;" class="material-icons">menu</i></a></li>
-                </ul>
-            </div>
-        </nav>
-
-        <br><br><br><br><br>
-
-        <div class="container" style="width: 800px; height: auto; background-color: white;"><br>
-            <div class="" style="margin-left: 40px;" id="content">
-                <form class="input-field" id="post-form" method="post">
-                    {% csrf_token %}
-                    <input type="text" style="color: #5b5a5b; width: 300px; font-size: 30px;" name="title" placeholder="제목을 입력하세요."><br>
-                    <span style="color: #e0e0e0; font-size: 20px;">{{ user.name }}</span>
-                    <br><br>
-                    <textarea name="text" style="color: grey; font-size: 15px; width: 700px; height: 300px;" form="post-form" rows="8" cols="40"></textarea>
-                    <br><br>
-                    <button class="btn waves-effect waves-light deep-purple" style="margin-left: 300px;" type="submit" name="action">게시</button>
-                </form>
-            </div>
-            <br>
-        </div>
-        <br><br>
-
-        <ul id="slide-out" class="side-nav">
-            <!-- <li><a class="waves-effect modal-trigger" href="#modal1">글쓰기</a></li> -->
-            <li><a class="waves-effect" href="/new_post/">글쓰기</a></li>
-            <!-- <li><a class="waves-effect" href="#!">게시판</a></li> -->
-            <li><a class="waves-effect" href="/setting">설정</a></li>
-            <li><a class="waves-effect" href="/accounts/logout/">로그아웃</a></li>
-        </ul>
-
-        <!-- Modal Structure -->
-        <div id="modal1" class="modal">
-            <div class="modal-content">
-                <h4>Modal Header</h4>
-                <p>A bunch of text</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-            </div>
-        </div>
-
-        <script type="text/javascript">
-            $(document).ready(function(){
-                // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-                $('.modal-trigger').leanModal();
-            });
-
-            $('#button-collapse').sideNav({
-                menuWidth: 200, // Default is 240
-                edge: 'right' // Choose the horizontal origin
-            });
-        </script>
-    </body>
-</html>
+{% endblock %}

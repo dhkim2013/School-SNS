@@ -8,3 +8,9 @@ class UserCreateForm(UserCreationForm):
     class Meta:
         model = CustumUser
         fields = ("username", "name", "password1", "password2", "job",)
+
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = CustumUser
+        fields = ('profileImage',)

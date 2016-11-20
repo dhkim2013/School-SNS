@@ -3,6 +3,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .forms import PostForm, CommentForm
+from accounts.forms import ProfileForm
 from django.contrib.auth import authenticate,login, models
 from accounts.models import CustumUser
 from .models import Post, Comment, Class
@@ -173,4 +174,41 @@ def setting(request):
             reqUser.save()
             group.save()
 
+    if request.method == 'POST':
+        handle_uploaded_file(request.FILES.get('profileImage'), user.username)
+        user.profileImage = 'profiles/' + user.username + '.jpg'
+        user.introduce = request.POST.get('introduce')
+        user.save()
+
     return render(request, 'class_room/setting_group.html', {'group': group, 'user': reqUserList, 'me': user})
+
+def handle_uploaded_file(f, name):
+
+    if f is not None:
+
+        with open('media/profiles/' + name + '.jpg', 'wb+') as destination:
+
+            for chunk in f.chunks():
+                destination.write(chunk)
+
+def profile(request):
+    user = CustumUser.objects.get(username=request.user)
+
+    if user.job == 'teacher':
+        group = Class.objects.get(teacher=user)
+
+    else:
+        group = Class.objects.all().get(students=user)
+
+    if request.method == 'POST':
+
+        print(request.FILES[profileImage])
+        if request.FILES.get('profileImage') is not None:
+            handle_uploaded_file(request.FILES.get('profileImage'), user.username)
+            user.profileImage = 'profiles/' + user.username + '.jpg'
+            print('test')
+
+        user.introduce = request.POST.get('introduce')
+        user.save()
+
+    return render(request, 'class_room/profile.html', {'group': group, 'user': user})

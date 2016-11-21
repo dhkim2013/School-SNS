@@ -1,4 +1,5 @@
 {% extends 'class_room/base.html' %}
+{% load staticfiles %}
 
 {% block content %}
 <div class="container" style="margin-left: 500px;">
@@ -18,7 +19,7 @@
         </p>
     </div>
     <div class="" style="display: inline-block;">
-        <img src="{{ user.profileImage.url }}" class="circle responsive-img" style="width: 200px; height: 200px; position: absolute; left: 70%; margin-left: -100px;"/>
+        <img src="{{ user.profileImage.url }}" class="circle responsive-img" style="width: 200px; height: 200px; position: absolute; left: 70%; margin-left: -100px; top: 110px;"/>
     </div>
 </div>
 <div class="" style="height: 200px; width: 100px;">
@@ -27,6 +28,10 @@
 <br>
 {% for i in posts %}
     <div class="container" style="width: 800px; height: auto; background-color: white;"><br>
+
+        {% if i.author == user %}
+        <img id="x" src="{% static 'images/x.png' %}" onclick="location.href='?pk={{ i.pk }}';" style="position: absolute; margin-left: 750px; width: 15px; height: 15px;" />
+        {% endif %}
         <div class="" style="margin-left: 40px;" id="content">
 
             <div id="post-info">

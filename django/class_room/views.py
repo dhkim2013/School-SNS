@@ -40,6 +40,13 @@ def index(request):
 
                     return HttpResponseRedirect('/?ts=2000-01-01')
 
+            try:
+                post = group.post.get(pk=request.GET.get('pk'))
+                post.delete()
+
+            except:
+                pass
+
             posts = group.post.filter().order_by('-pk')
 
             return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
@@ -188,7 +195,10 @@ def setting(request):
     if request.method == 'POST':
         handle_uploaded_file(request.FILES.get('profileImage'), user.username)
         user.profileImage = 'profiles/' + user.username + '.jpg'
-        user.introduce = request.POST.get('introduce')
+
+        if request.POST.get('introduce') != '':
+            user.introduce = request.POST.get('introduce')
+
         user.save()
 
         return HttpResponseRedirect('/setting?ts=2000-01-01')
@@ -206,25 +216,25 @@ def handle_uploaded_file(f, name):
 
 def notice(request):
 
-    try:
-        user = CustumUser.objects.get(username=request.user)
+    # try:
+    user = CustumUser.objects.get(username=request.user)
 
-        if user.hasGroup == True:
+    if user.hasGroup == True:
 
-            if user.job == 'teacher':
-                group = Class.objects.get(teacher=user)
+        if user.job == 'teacher':
+            group = Class.objects.get(teacher=user)
 
-            else:
-                group = Class.objects.all().filter(students=user)[0]
+        else:
+            group = Class.objects.all().filter(students=user)[0]
 
-            if request.method == 'POST':
+        if request.method == 'POST':
 
-                if request.POST['keyword']:
-                    posts = group.post.filter(Q(title__contains=request.POST['keyword'])).filter(author__job='teacher').order_by('-pk')
+                try:
+                    posts = group.post.filter(Q(title__contains=request.POST['keyword'])).order_by('-pk')
 
                     return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
 
-                else:
+                except:
                     form = CommentForm(request.POST)
                     comment = form.save(commit=False)
                     comment.writer = CustumUser.objects.get(username=request.user)
@@ -232,17 +242,26 @@ def notice(request):
                     group.post.get(pk=request.POST.get('pk')).comment.add(comment)
                     group.save()
 
-                    return HttpResponseRedirect('/?ts=2000-01-01')
+                    return HttpResponseRedirect('/notice/?ts=2000-01-01')
 
-            posts = group.post.filter(author__job='teacher').order_by('-pk')
+        try:
+            post = group.post.get(pk=request.GET.get('pk'))
+            post.delete()
 
-            return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
+            return HttpResponseRedirect('/notice?ts=2000-01-01')
 
-        else :
-            return render(request, 'class_room/index.html', {'user': user})
+        except:
+            pass
 
-    except:
-        return HttpResponseRedirect('/accounts/login')
+        posts = group.post.filter(author__job='teacher').order_by('-pk')
+
+        return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
+
+    else :
+        return render(request, 'class_room/index.html', {'user': user})
+
+    # except:
+    #     return HttpResponseRedirect('/accounts/login')
 
 def board(request):
 
@@ -259,12 +278,12 @@ def board(request):
 
             if request.method == 'POST':
 
-                if request.POST['keyword']:
-                    posts = group.post.filter(Q(title__contains=request.POST['keyword'])).filter(author__job='student').order_by('-pk')
+                try:
+                    posts = group.post.filter(Q(title__contains=request.POST['keyword'])).order_by('-pk')
 
                     return render(request, 'class_room/mygroup.html', {'group': group, 'posts': posts, 'user': user})
 
-                else:
+                except:
                     form = CommentForm(request.POST)
                     comment = form.save(commit=False)
                     comment.writer = CustumUser.objects.get(username=request.user)
@@ -272,7 +291,16 @@ def board(request):
                     group.post.get(pk=request.POST.get('pk')).comment.add(comment)
                     group.save()
 
-                    return HttpResponseRedirect('/?ts=2000-01-01')
+                    return HttpResponseRedirect('/board/?ts=2000-01-01')
+
+            try:
+                post = group.post.get(pk=request.GET.get('pk'))
+                post.delete()
+
+                return HttpResponseRedirect('/board?ts=2000-01-01')
+
+            except:
+                pass
 
             posts = group.post.filter(author__job='student').order_by('-pk')
 

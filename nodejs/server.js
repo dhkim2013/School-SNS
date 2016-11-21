@@ -3,6 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var userName = {};
+var groups = {};
 var getName = '';
 var groupName = '';
 
@@ -13,21 +14,25 @@ app.get("/:id/:group",function(req, res){
 });
 
 io.on('connection', function(socket){
+    var group = groupName;
+    if (groups[group] == null) groups[group] = {};
+    var groupObj = groups[group];
     console.log('user connected: ', socket.id);
-    userName[socket.id] = getName;
-    var name = userName[socket.id]
+    groupObj[socket.id] = getName;
+    socket.join(group);
+    var name = groupObj[socket.id];
     io.to(socket.id).emit('change name', name, groupName, socket.id);
-    io.emit('connect someone', name, userName)
+    io.in(group).emit('connect someone', name, groupObj)
 
     socket.on('disconnect', function(){
         console.log('user disconnected: ', socket.id);
-        name = userName[socket.id];
-        delete userName[socket.id];
-        io.emit('disconnect', name, userName)
+        name = groupObj[socket.id];
+        delete groupObj[socket.id];
+        io.in(group).emit('disconnect', name, groupObj)
     });
 
     socket.on('send message', function(name, text, id){
-        io.emit('receive message', name, text, id);
+        io.in(group).emit('receive message', name, text, id);
     });
 });
 

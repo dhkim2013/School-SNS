@@ -195,8 +195,10 @@ def setting(request):
         return HttpResponseRedirect('/setting?ts=2000-01-01')
 
     if request.method == 'POST':
-        handle_uploaded_file(request.FILES.get('profileImage'), user.username)
-        user.profileImage = 'profiles/' + user.username + '.jpg'
+
+        if request.FILES.get('profileImage'):
+            handle_uploaded_file(request.FILES.get('profileImage'), user.username)
+            user.profileImage = 'profiles/' + user.username + '.jpg'
 
         if request.POST.get('introduce') != '':
             user.introduce = request.POST.get('introduce')

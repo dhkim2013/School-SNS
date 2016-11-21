@@ -55,7 +55,7 @@
 
         {% if request.user.is_authenticated %}
 
-        <img src="{% static 'images/logout2.png' %}" class="right" id="logout" style="position: absolute; right: 20px; top: 20px;" onclick="location.href='http://layer7.kr:3333/accounts/logout';"/>
+        <img src="{% static 'images/logout2.png' %}" class="right" id="logout" style="position: absolute; right: 20px; top: 20px;" onclick="location.href='/accounts/logout';"/>
 
         <div class="valign-wrapper" id="valign-wrapper">
             <div class="valign container center">

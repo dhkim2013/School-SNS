@@ -5,6 +5,7 @@ var io = require('socket.io')(http);
 var userName = {};
 var getName = '';
 var groupName = '';
+var groups = {};
 
 app.get("/:id/:group",function(req, res){
     res.sendfile("client.html");
@@ -23,7 +24,7 @@ io.on('connection', function(socket){
     socket.join(group);
 
     var name = groupObj[socket.id];
-    
+
     io.to(socket.id).emit('change name', name, groupName, socket.id);
     io.in(group).emit('connect someone', name, groupObj)
 

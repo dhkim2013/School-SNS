@@ -1,7 +1,30 @@
 {% extends 'class_room/base.html' %}
 
 {% block content %}
+<div class="container" style="margin-left: 500px;">
+    <div class="" style="display: inline-block;">
+        <p style="font-size: 50px; position: absolute; top: 50px; left: 25%;">
+            {{ group.name }} 그룹
+        </p>
+        <p class="flow-text" style="font-size: 50px; position: absolute; top: 150px; color: gray; left: 25%;">
+            {{ user.name }}
+        </p>
+        <p class="flow-text" style="font-size: 50px; position: absolute; top: 200px; color: gray; left: 25%;">
+            {% if user.introduce == '' %}
+                자기소개가 없습니다.
+            {% else %}
+                {{ user.introduce }}
+            {% endif %}
+        </p>
+    </div>
+    <div class="" style="display: inline-block;">
+        <img src="{{ user.profileImage.url }}" class="circle responsive-img" style="width: 200px; height: 200px; position: absolute; left: 70%; margin-left: -100px;"/>
+    </div>
+</div>
+<div class="" style="height: 200px; width: 100px;">
 
+</div>
+<br>
 {% for i in posts %}
     <div class="container" style="width: 800px; height: auto; background-color: white;"><br>
         <div class="" style="margin-left: 40px;" id="content">

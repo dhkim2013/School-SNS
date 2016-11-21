@@ -32,8 +32,8 @@
 
                 <div class="row" style="margin-left: 200px;">
                     <div class="input-field col s8">
-                        <textarea id="textarea1" form="post-form" name="introduce" class="materialize-textarea"></textarea>
-                        <label for="textarea1">자기소개</label>
+                        <input id="intro" type="text" class="validate" name="introduce" maxlength="20">
+                        <label for="intro">자기소개</label>
                     </div>
                 </div>
 
@@ -41,8 +41,7 @@
 
                 <div class="row" style="margin-left: 200px;">
                     <div class="input-field col s8">
-                        <textarea id="textarea1" form="post-form" name="introduce" placeholder="{{ user.introduce }}" class="materialize-textarea"></textarea>
-                        <label for="textarea1">자기소개</label>
+                        <input id="intro" maxlength="20" type="text" class="validate" name="introduce" placeholder="{{ user.introduce }}">
                     </div>
                 </div>
 

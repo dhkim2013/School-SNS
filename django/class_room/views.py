@@ -44,6 +44,8 @@ def index(request):
                 post = group.post.get(pk=request.GET.get('pk'))
                 post.delete()
 
+                return HttpResponseRedirect('/?ts-2000-01-01')
+
             except:
                 pass
 

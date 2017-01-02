@@ -1,3 +1,3 @@
 # school_sns
-*Summary
+* Summary
 This is the SNS service for school class.
